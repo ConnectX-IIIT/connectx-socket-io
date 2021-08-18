@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 
 const server = http.createServer(app);
 
-app.listen(port);
+server.listen(port);
 
 const io = socketIO(server);
 
