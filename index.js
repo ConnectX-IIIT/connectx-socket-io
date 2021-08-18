@@ -38,8 +38,8 @@ io.on("connection", (socket) => {
         io.emit("getUsers", users);
     });
 
-    socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-        const user = getUser(receiverId);
+    socket.on("sendMessage", async ({ senderId, receiverId, text }) => {
+        const user = await getUser(receiverId);
         io.to(user.socketId).emit("getMessage", {
             senderId,
             text,
