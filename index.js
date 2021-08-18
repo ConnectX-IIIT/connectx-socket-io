@@ -1,8 +1,21 @@
-const io = require("socket.io")(4000, {
-    cors: {
-        origin: "http://localhost:3000",
-    },
-});
+const http = require('http');
+const express = require('express');
+const cors = require('cors');
+const socketIO = require('socket.io');
+
+const app = express();
+const port = process.env.PORT;
+
+app.use(cors());
+app.get("/", (req, res) => {
+    res.send("Hello world!");
+})
+
+const server = http.createServer(app);
+
+app.listen(port);
+
+const io = socketIO(server);
 
 let users = [];
 
@@ -20,8 +33,6 @@ const getUser = (userId) => {
 };
 
 io.on("connection", (socket) => {
-    console.log("User connected");
-
     socket.on("addUser", (userId) => {
         addUser(userId, socket.id);
         io.emit("getUsers", users);
@@ -36,7 +47,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect", () => {
-        console.log("a user disconnected!");
         removeUser(socket.id);
         io.emit("getUsers", users);
     });
